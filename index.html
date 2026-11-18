@@ -75,16 +75,16 @@
   .btn-sm { min-height: 44px; padding: 0 18px; font-size: 14px; }
 
   /* ---------- Herói: o estúdio dele, cortado no ângulo da lâmina ---------- */
-  .heroi { position: relative; min-height: min(84vh, 800px); display: flex; align-items: center; overflow: hidden; isolation: isolate; }
-  .heroi__foto { position: absolute; top: 0; right: 0; bottom: 0; width: 55%; clip-path: polygon(150px 0, 100% 0, 100% 100%, 0 100%); z-index: -1; }
+  .heroi { --corte-x: calc(50% + 10px); position: relative; min-height: min(84vh, 800px); display: flex; align-items: center; overflow: hidden; isolation: isolate; }
+  .heroi__foto { position: absolute; top: 0; right: 0; bottom: 0; left: var(--corte-x); clip-path: polygon(150px 0, 100% 0, 100% 100%, 0 100%); z-index: -1; }
   .heroi__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 62%; }
   .heroi__foto::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11, 11, 12, .55), transparent 30%), linear-gradient(transparent 70%, rgba(11, 11, 12, .5)); }
-  .heroi__laminas { position: absolute; top: 0; bottom: 0; left: calc(45% - 66px); width: 216px; height: 100%; z-index: -1; pointer-events: none; }
+  .heroi__laminas { position: absolute; top: 0; bottom: 0; left: calc(var(--corte-x) - 66px); width: 216px; height: 100%; z-index: -1; pointer-events: none; }
   .heroi__laminas polygon { fill: var(--verm); transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); transition: transform .9s cubic-bezier(.7, 0, .2, 1); }
   .heroi__laminas polygon:nth-child(2) { fill-opacity: .72; transition-delay: .12s; }
   .heroi__laminas polygon:nth-child(3) { fill-opacity: .45; transition-delay: .24s; }
   .pronto .heroi__laminas polygon { transform: none; }
-  .heroi__texto { max-width: 560px; padding: 60px 0 70px; }
+  .heroi__texto { max-width: 610px; padding: 60px 0 70px; }
   .selo { display: inline-flex; align-items: center; gap: 10px; color: #fff; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
   .selo b { background: var(--verm); padding: 4px 9px; letter-spacing: .06em; }
   .heroi h1 { font-size: clamp(36px, 3.75vw, 58px); margin: 22px 0 20px; }
@@ -251,7 +251,7 @@
 
   @media (max-width: 980px) {
     .heroi { flex-direction: column; align-items: stretch; min-height: 0; }
-    .heroi__foto { position: relative; width: 100%; height: 62vw; max-height: 520px; clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%); }
+    .heroi__foto { position: relative; left: auto; width: 100%; height: 62vw; max-height: 520px; clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%); }
     .heroi__laminas { display: none; }
     .heroi__texto { padding: 18px 0 56px; }
     .bento { grid-template-columns: 1fr; grid-template-rows: none; }
@@ -300,7 +300,15 @@
     html { scroll-behavior: auto; }
     .rev, .pal { transform: none; }
     .heroi__foto img { transform: none; transition: none; }
-    .letreiro__trilho { animation: none; }
+    .letreiro__trilho { animation: none; width: auto; }
+    .letreiro__grupo + .letreiro__grupo { display: none; }
+    .letreiro__grupo { width: 100%; flex-wrap: wrap; justify-content: center; row-gap: 10px; padding-right: min(240px, 32vw); }
+  }
+  @media (prefers-reduced-motion: reduce) and (max-width: 640px) {
+    .letreiro::after { width: 56px; }
+    .letreiro__grupo { gap: 8px 18px; padding: 16px 64px 16px 16px; justify-content: flex-start; }
+    .letreiro span { font-size: 13px; gap: 18px; }
+    .letreiro span::after { display: none; }
     .corte { clip-path: polygon(0 0, calc(100% - var(--chanfro)) 0, 100% var(--chanfro), 100% 100%, 0 100%); opacity: 0; transition: opacity .8s ease; }
     .corte.vis { opacity: 1; }
   }
