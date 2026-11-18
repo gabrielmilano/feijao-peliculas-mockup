@@ -584,7 +584,14 @@
 
   // Entrada ao rolar (fades e o corte diagonal das fotos)
   const io = new IntersectionObserver((ent) => ent.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("vis"); io.unobserve(e.target); } }), { threshold: .12 });
-  document.querySelectorAll(".rev, .corte").forEach((el) => io.observe(el));
+  document.querySelectorAll(".rev").forEach((el) => io.observe(el));
+  // A foto com corte começa toda recortada, e o navegador não a vê "na tela";
+  // por isso quem é observado é o bloco em volta, e ele revela as fotos de dentro.
+  const ioCorte = new IntersectionObserver((ent) => ent.forEach((e) => {
+    if (!e.isIntersecting) return; ioCorte.unobserve(e.target);
+    e.target.querySelectorAll(":scope > .corte").forEach((c) => c.classList.add("vis"));
+  }), { threshold: .12 });
+  new Set([...document.querySelectorAll(".corte")].map((c) => c.parentElement)).forEach((p) => ioCorte.observe(p));
 
   // Herói: título palavra a palavra, foto assentando e as 3 lâminas subindo
   (() => {
